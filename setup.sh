@@ -9,6 +9,9 @@ sudo apt install ubuntu-desktop -y
 # Install necessary tools
 sudo apt install wget gdebi-core -y
 
+# Install OpenSSH client, server, and SFTP server
+sudo apt install openssh-client openssh-server openssh-sftp-server -y
+
 # Install AnyDesk
 wget -qO - https://keys.anydesk.com/repos/DEB-GPG-KEY | sudo apt-key add -
 echo "deb http://deb.anydesk.com/ all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list
