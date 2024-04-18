@@ -22,5 +22,8 @@ sudo apt install anydesk -y
 wget https://github.com/rustdesk/rustdesk/releases/download/1.1.8/rustdesk-1.1.8.deb
 sudo gdebi rustdesk-1.1.8.deb -n
 
+# Prevent the system from going to sleep or suspending
+sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+
 echo "Installation complete. Rebooting the system now..."
 sudo reboot
