@@ -25,5 +25,8 @@ sudo gdebi rustdesk-1.1.8.deb -n
 # Prevent the system from going to sleep or suspending
 sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 
+# Configure Netplan to use NetworkManager
+    echo -e "network:\n  version: 2\n  renderer: NetworkManager" | sudo tee /etc/netplan/00-installer-config.yaml
+
 echo "Installation complete. Rebooting the system now..."
 sudo reboot
