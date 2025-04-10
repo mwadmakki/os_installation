@@ -25,8 +25,34 @@ sudo gdebi rustdesk-1.1.8.deb -n
 # Prevent the system from going to sleep or suspending
 #sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 
-# Configure Netplan to use NetworkManager
-    #echo -e "network:\n  version: 2\n  renderer: NetworkManager" | sudo tee /etc/netplan/00-installer-config.yaml
+
+# Get connected display name (e.g., eDP-1, HDMI-1)
+DISPLAY_NAME=$(xrandr | grep " connected" | cut -f1 -d " ")
+
+# Define the mode name and parameters
+MODE_NAME="1920x1080_60.00"
+MODELINE=$(cvt 1920 1080 | grep Modeline | cut -d " " -f 2-)
+
+# Check if mode already exists
+xrandr | grep -q "$MODE_NAME"
+if [ $? -ne 0 ]; then
+    xrandr --newmode $MODELINE
+    xrandr --addmode "$DISPLAY_NAME" "$MODE_NAME"
+fi
+
+# Apply the mode
+xrandr --output "$DISPLAY_NAME" --mode "$MODE_NAME"
+
+# Add to ~/.xprofile for persistence (if not already there)
+XPROFILE="$HOME/.xprofile"
+grep -q "$MODE_NAME" "$XPROFILE" 2>/dev/null || {
+    echo "Saving to $XPROFILE for persistence..."
+    {
+        echo "xrandr --newmode $MODELINE"
+        echo "xrandr --addmode $DISPLAY_NAME $MODE_NAME"
+        echo "xrandr --output $DISPLAY_NAME --mode $MODE_NAME"
+    } >> "$XPROFILE"
+}
 
 echo "Installation complete. Rebooting the system now..."
 sudo reboot
